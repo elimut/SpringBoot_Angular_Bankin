@@ -44,6 +44,30 @@ admin table rôle unidirectionnelle one to one
 
 Spting initializr
 
+Spring Web WEB
+Build web, including RESTful, applications using Spring MVC. Uses Apache Tomcat as the default embedded container.
+Lombok DEVELOPER TOOLS
+Java annotation library which helps to reduce boilerplate code.
+Spring Data JPA SQL
+Persist data in SQL stores with Java Persistence API using Spring Data and Hibernate.
+PostgreSQL Driver SQL
+A JDBC and R2DBC driver that allows Java programs to connect to a PostgreSQL database using standard, database independent Java code.
+Spring Security SECURITY
+Highly customizable authentication and access-control framework for Spring applications.
+
+### Démarrer et tester l'application
+
+Import projet avec Maven: 
+settings build Bundled (Maven 3)
+
+application.properties => .yaml
+
+## Spring Data et connexion à la base de données
+
+### Configurer la base de données
+
+
+
 
 ## Sources
 
