@@ -11,21 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Address {
+public class Role {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    private String street;
-
-    private Integer houseNumber;
-
-    private Integer zipCode;
-
-    private String city;
-
-    private String country;
+    private String name;
 
     @OneToOne
     @JoinColumn(name = "id_user")

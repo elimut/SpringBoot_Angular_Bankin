@@ -11,23 +11,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Address {
+public class Contact {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    private String street;
+    private String firstname;
 
-    private Integer houseNumber;
+    private String lastname;
 
-    private Integer zipCode;
+    private String email;
 
-    private String city;
+    private String iban;
 
-    private String country;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
 }

@@ -83,7 +83,7 @@ configuration supplémentaire pour jpa:
 jpa:
 hibernate:
 ddl-auto:
-définitiion du comportement, de Spring application vis à vis de la bdd.
+définition du comportement, de Spring application vis à vis de la bdd.
 ddl-auto au démarrage de l'application ce que je veux faire avec la bdd.
 create pour créer le schéma et supprimer les données précédentes
 create drop permet de créer et ensuite détruire le schéma à la fin de la session
@@ -133,7 +133,7 @@ Initialized JPA EntityManagerFactory for persistence unit 'default' => crée un 
 
 Spécifie que la classe est une **entité persistante**:
 représentation du code d'une table dans la BDD.
-On dit à hibernate que c'est une représentation de la table, Spring trouve @Entity, il considère cette clase comme une entité et se base sur la confi de application.yaml et en fera ce qui est indiqué
+On dit à hibernate que c'est une représentation de la table, Spring trouve @Entity, il considère cette classe comme une entité et se base sur la confi de application.yaml et en fera ce qui est indiqué
 
 ### @Table
 
@@ -249,8 +249,34 @@ soit on crée ou ajoute la clé étrangère d'une entité dans une autre, ou ajo
 On définit les relations, la relation soit au niveau de l'adresse, quand on crée un étudiant sa clé soit dans l'netité adresse mais pas dans étudiant.
 Mapping niveau table adresse, puis définir la deuxième relation dans student
 
+### Créer les entités
 
+Désactivation de la dépendance security.
+application.yaml configuration DB
+création des models
+@Builder de lombok pour générer simplement les objets, @Dtaa pour les getter et setter
 
+    private TransactionType type;
+création d'un enum, utilisation d'numération au niveau des entités, on doit mentionner à hibernate que c'est un **enum** on utilise @Enumerated(type soit ordinal pour un entier ou String )
+
+### Ajout du mapping (relations) entre les entités
+
+Implémentation des relations entre les objets.
+Avec  @Builder on doit définir un constructeur avec paramètres, ce design pattern utilise un constructeur avec paramètres pour créer les objets.
+
+Caused by: org.postgresql.util.PSQLException: ERREUR: erreur de syntaxe sur ou près de « user »
+user nom réservé par PostGreSQL.
+
+### Optimisation du code et ajout du JpaAuditing
+
+Dans chaque entité un attribut id
+Transaction et account create et update date, peuvent être utilisés pour toutes les entités.
+On peut les extraire dans une classe:
+
+**AbstractEntity**
+**@MappedSuperclass**
+public class AbstractEntity {
+Entité ou classe qui définit des informations qui seront héritées par les classes qui vont étendre celles-ci
 
 ## Sources
 

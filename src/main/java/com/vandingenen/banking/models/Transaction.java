@@ -6,28 +6,30 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Address {
+public class Transaction {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    private String street;
+    private BigDecimal amount;
 
-    private Integer houseNumber;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
 
-    private Integer zipCode;
+    private String destinationIban;
 
-    private String city;
 
-    private String country;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
+
 }
