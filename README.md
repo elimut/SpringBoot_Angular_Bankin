@@ -273,10 +273,98 @@ Dans chaque entité un attribut id
 Transaction et account create et update date, peuvent être utilisés pour toutes les entités.
 On peut les extraire dans une classe:
 
-**AbstractEntity**
 **@MappedSuperclass**
 public class AbstractEntity {
-Entité ou classe qui définit des informations qui seront héritées par les classes qui vont étendre celles-ci
+Entité ou classe qui définit des informations qui seront héritées par les classes qui vont étendre celles-ci.
+Permet de rendre le code plus lisible, optimisation
+
+@Builder avec héritage avec lombok on doit utiliser **@SuperBuilder** pour construire avec les objets hérités.
+
+    package com.vandingenen.banking.models;
+
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.GeneratedValue;
+    import jakarta.persistence.Id;
+    import jakarta.persistence.MappedSuperclass;
+    import lombok.Builder;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+    import lombok.experimental.SuperBuilder;
+    
+    import java.time.LocalDateTime;
+    
+    @Data
+    @NoArgsConstructor
+    @SuperBuilder
+    @MappedSuperclass
+    public class AbstractEntity {
+    
+        @Id
+        @GeneratedValue
+        private Integer id;
+    
+        private LocalDateTime creationDate;
+    
+        private LocalDateTime lastUpdated;
+    }
+Dans cette classe l'on a les deux champs dates doivent être mis à jour lors de la création et de la mise à jour, les valeurs doivent être initialisées.
+Hibernate a des annotations pour ce faire:
+
+**@CreatedDate et @LastModifiedDate**
+
+Ajout de @Column pour ajouter des informations complémentaires.
+
+**@EntityListeners(AuditingEntityListener.class)** => pour calculer ou activer les valeurs de created et lastModified
+il faut l'activer dans le main @EnableJpaAuditing. Permettra de faire appel à cette classe pour implementer ce qui est demandé.
+
+
+## Implémenter les repositories
+
+### Repository? (JpaRepository)
+
+SpringData est un modèle de programmation basé sur Spring pour l'accès aux données. Réduction du code nécessaire pour l'accès aux DB et des data storage.
+Il se compose de plusieurs modules, aussi il simplifie le développement d'application Spring qui utilise la technologie Jpas, simplifie toutre la partie accès aux données dans une application Spring.
+
+On définit une interface de référentiel ou **repository** pour chaque entité de domaine de notre application: on crée un repository pour chacune.
+
+Un repository contient des méthodes pour effectuer des opérations CRUD, trier et paginer des opérations CRUD (quatre opérations qui peuvent être effectuer au niveau d'une DB).
+Un référentiel est créé en étendant des interfaces repository spécifiques, tels que:
+- CrudRepository,
+- PagingAndSortingRepository,
+- JpaRepository.
+Pour créer un repository, il suffit d'étendre une de ces trois interfaces.
+
+SpringData est une intégration avancée avec les controllers Spring MVC. Il fournit une dérivation dynamique des requêtes à partir des noms de models, des noms, des méthodes de référentiels.
+Simplifie la création des models ou la phase d'accès aux données en utilisant le **SDP**: SpringDataPattern.
+
+### Spring Data Pattern
+
+Spring a le pouvoir de comprendre et générer la requête à partir du nom d'une méthode.
+En SQL select * FROM ...
+Avec le SDP, on utilise findAll() 
+
+On écrit pas de SQL.
+
+User création de la première interface. JpaRepository, il faut créer une interface et de l'étendre par une interface Crud du repository Jpa.
+Transformer cette interface en une interface ou repositoryJpa ou un référentiel d'une façon général:
+
+public interface UserRepository extends JpaRepository{
+
+}
+Cette interface, JpaRepo prend un objet T qui est le domaine et id type de l'id:
+JpaRepository<T, ID>
+On a transformé l'interface UserRepo vers une interface ou JpaRepository.
+
+CrudRepository => save(), find(), ... méthodes de base crud.
+Implémentation d'autres fonctionnalités via l'interface de pagingAnd avec findAll() avec sort et/ou pagination.
+Jpa avec d'autres fonctionnalités.
+
+Jointure avec STP.
+
+
+
+
+
 
 ## Sources
 
