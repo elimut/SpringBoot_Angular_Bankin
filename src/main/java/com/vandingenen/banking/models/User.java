@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User extends AbstractEntity{
+public class User extends AbstractEntity {
+
 
     private String firstname;
 

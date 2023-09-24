@@ -361,6 +361,147 @@ Jpa avec d'autres fonctionnalités.
 
 Jointure avec STP.
 
+Comment écrire ou générer des requêtes avec des méthodes simples.
+
+### @Query avec JPQL
+
+Précédemment, l'on a vu comment utiliser le nom des méthodes pour chercher les données = SDP.
+Comment faire pour des requêtes plus complexes, personnalisées? => **@Query**
+Methode pour déclarer des méthodes de recherches.
+
+@Query("") valeur est la requête elle-même, on doit utiliser le **JPQL** JPA QUERY LANGUAGE, cela ressemble au SQL mais l'on manipule les objets pas les tables.
+On utilise le nom de l'entité.
+
+    @Query("from User where firstname = :fn")
+    List<User> searchByFirstname(String firstname);
+Comment faire le binding entre les deux paramètres firstname et fn?
+soit on les appelle de la même façon, sinon on utilise @Param
+(aucun espace :fn)
+
+    @Query("from User where firstname = :fn")
+    List<User> searchByFirstname(@Param("fn") String firstname);
+
+Comment exécuter une requête SQL native dans le JPA repository?
+
+### @Query avec SQL natif
+
+Dans le cas où l'on a une requête native que l'on souhaite exécuter dans le repository:
+
+    @Query("from User u inner join Account a on u.id = a.user.id where a.iban = :iban")
+    List<User> searchByIban(String iban);
+
+    @Query("select * from _user u inner join account a on u.id = a.user_id where a.iban = :iban, nativeQuery = true")
+    List<User> searchByIbanNative(String iban);
+
+## Implémenter les DTOs
+
+### C'est quoi et pourquoi?
+
+L'application d'entreprise nous permet de manipuler, d'afficher et de stocker des quantités massives de données.
+Nous devons donc penser à éviter le couplage fort et assurer l'intégrité et la sécurité des données venant du travaiil.
+
+**DTO**:
+Data Transfer Object ou objet de transfert de données.
+Modèle de conception, design pattern.
+
+C'est l'un des modèle que nous appellons lorsque nous devons utiliser de tels objets qui encapsulent et agrège les données pour le transfert.
+Il est similaire à une structure de données, mais comme structure de données il ne contient aucune logique métier.
+Il contient juste un mécanisme de sérialisation et de désérialisation.
+
+L'on peut donc y stocker des données provenant d'une seule source ou plusieurs ressources.
+Soit stockage des données complètes soit des petites quantités de données.
+
+Implémenter un DTO ou plusieurs dans notre code, cela signifie que le transfert des données se fait entre les systèmes, les DTO est principalmeent utilisé pour réduire le nombre d'appels distants couteux.
+Afin de convertir les données entre DTO et tous les objets entités, on utilise des **mappers**
+
+Entité User:
+je veux l'exposer ou communiquer avec le monde extérieur, le monde externe à l'API REST.
+pour créer un compte de quoi ai-je besoin: mdp, nom, ...
+l'entité User contient plus d'informations que ces informations.
+Il ne faut jamais exposer les entités du système, il faut passer par les DTO.
+
+Pour créer un User, on crée un DTO qui contient nom, prénom, mdp, ...
+Informations nécessaires pour le compte User. Pour les autres informations, il faut créer un autre DTO.
+
+Pour exposer un endpoint qui permet de chercher un ensemble d'User ou un autre système ou une autre API REST.
+endpoint GET.
+Exposer le minimum nécessaire, pas les informations sensibles.
+
+Structure?
+une structure de données, une classe avec un ensemble d'attributs.
+
+Pour la transformation → **mapping**, transformer un DTO vers un objet User entity et vice versa.
+Il y a plusieurs façons de faire, implémenter le code avec get set ou un mapper.
+
+### Comment le créer?
+
+Objectif: transformer ou transférer les données entre le système et le monde extérieur.
+Créer un nouvel user, ou connexion exemple.
+Il manque les get et set → lombok
+
+### Le mapping entre entité et DTO et vice versa
+
+Opération de mapping, transformation des objets entre entités et DTO et vice versa.
+
+Pour transformer l'objet, on doit avoir deux méthodes qui transforment une entité vers un DTO et inversement.
+
+Deux façons:
+- bibliothèque comme abstract par mapstract
+- manuellement
+
+mapping c'est get/set
+
+### Implémenter tous les Dtos
+
+## Validation des objets avec JSR-303
+
+### Pourquoi valider les objets?
+
+Cas où l'on autorise n'importe quelle valeur lorsque que l'on veut persister les informations.
+On peut persister des valeurs nulles dans la Db, cela n'est pas bloquant, mais aucune connexion ne serait possible.
+Intégrité des objets, il faut des données dans le stockage.
+Autre cas, valeurs erronées.
+Obligation de saisie d'un minimum de caractères, ...
+Appliquer nos règles de gestions.
+
+### Annotations de validation
+
+Il faut ajouter le starter dédié.
+
+### Personnaliser les messages de validation
+
+Exemple plusieurs langues application.
+Il y a des messages par défaut, pour le personnaliser il faut ajouter la propriété message.
+
+### Implémenter un validateur générique
+
+L'objet est-il valide? on doit demander à Spring de valider ces objets-là.
+Soit déléguer l'opération à Spring soit implémenter notre propre validateur.
+
+A Spring => dans le controller, on peut utiliser la notation valide pour que Spring le valide.
+Ou l'on crée le validateur personnalisé, et en faire appel.
+Validation dans Account Dto que l'utilisateur ou bien que le service utilisateur a bien fourni l'IBAN et aussi, qu'il a bien fournit l'objet user et objet id par exemple.
+
+Pour implémenter le validateur:
+class ObjectValidator => classe générique pour valider les objets.
+
+## Créer des exceptions personnalisées
+
+### Pourquoi?
+
+Lever une exception.
+Erreur de validation, on doit lever une exception pour exprimer qu'il y a un problème.
+
+Règle de gestion → erreur → informer extérieur qu'un problème s'est produit, il faut donc renvoyer quelque chose de compréhensible.
+
+
+
+
+
+
+
+
+
 
 
 
